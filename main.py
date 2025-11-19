@@ -1,13 +1,15 @@
 from task_manager import TaskManager
+from ai_service import create_simple_task
 
 def print_menu():
     print("\n¡Bienvenido al gestor de tareas inteligente!\n")
     print("Comandos disponibles:")
-    print("1. add <description> --- Añadir una nueva tarea")
-    print("2. list ---------------- Mostrar todas las tareas")
-    print("3. complete <id> ------- Marcar una tarea como completada")
-    print("4. delete <id> --------- Eliminar una tarea")
-    print("5. exit ---------------- Salir de la aplicación\n")
+    print("add <description> --- Añadir una nueva tarea")
+    print("addia <description> - Añadir una nueva tarea utilizando la IA")
+    print("list ---------------- Mostrar todas las tareas")
+    print("complete <id> ------- Marcar una tarea como completada")
+    print("delete <id> --------- Eliminar una tarea")
+    print("exit ---------------- Salir de la aplicación\n")
 
 def main():
 
@@ -24,6 +26,19 @@ def main():
                     print("\nError: Se requiere una descripción para la tarea")
                 else:
                     task_manager.add_task(choice[1])
+
+            case "addia":
+                if len(choice) < 2:
+                    print("\nError: Se requiere una descripción para la tarea")
+                else:
+                    subtasks = create_simple_task(choice[1])
+                    if subtasks and not subtasks[0].startswith("Error"):
+                        print("\nSubtareas generadas por IA:")
+                        for subtask in subtasks:
+                            task_manager.add_task(subtask)
+                    else:
+                        print(f"\n{subtasks[0]}")
+                        break
 
             case "list":
                 task_manager.list_task()
